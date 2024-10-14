@@ -1,0 +1,131 @@
+#include <stdio.h>
+#include<stdlib.h>
+void prims(int n, int cost[10][10]);
+int main() 
+{
+    int i,j,n,cost[10][10];
+    printf("enter the number of nodes\n");
+    scanf("%d",&n);
+    printf("enter the adjacency matrix\n");
+    for(i=1;i<=n;i++)
+    {
+        for(j=1;j<=n;j++)
+        {
+            scanf("%d",&cost[i][j]);
+            if(cost[i][j]==0 && i!=j)
+            cost[i][j]=999;
+        }
+    }
+    prims(n,cost);
+
+    return 0;
+}
+
+void prims(int n, int cost[10][10])
+{
+    int i,j,u,v,min,mincost=0,visited[10],count=1;
+ for(i=1;i<=n;i++)
+    visited[i]=0;
+    printf("edges considered for mst are\n");
+    visited[1]=1;
+    
+  while(count<n)
+  {
+      min=999;
+      for(i=1;i<=n;i++)
+      {
+          for(j=1;j<=n;j++)
+          {
+              if(cost[i][j]<min)
+              {
+                  if(visited[i]==0)
+                  continue;
+                  else
+                  min=cost[i][j];
+                  u=i;
+                  v=j;
+              }
+          }
+      }
+      if(visited[u]==0 || visited[v]==0)
+      {
+          printf("%d edge(%d,%d)=%d\n",count++,u,v,min);
+          mincost=mincost+min;
+          visited[v]=1;
+      }
+      cost[u][v]=cost[v][u]=999;
+  }
+  printf("the mincost is %d",mincost);
+}
+
+
+
+
+
+
+
+GPT
+
+
+#include <stdio.h>
+#include<stdlib.h>
+
+void prims(int n, int cost[10][10]);
+
+int main() {
+    int i, j, n, cost[10][10];
+    printf("Enter the number of nodes: \n");
+    scanf("%d", &n);
+    
+    printf("Enter the adjacency matrix: \n");
+    for (i = 1; i <= n; i++) {
+        for (j = 1; j <= n; j++) {
+            scanf("%d", &cost[i][j]);
+            if (cost[i][j] == 0 && i != j) {
+                cost[i][j] = 999; // Use 999 to represent infinity for disconnected edges
+            }
+        }
+    }
+    
+    prims(n, cost); // Call the Prim's algorithm function
+    
+    return 0;
+}
+
+void prims(int n, int cost[10][10]) {
+    int i, j, u = 0, v = 0, min, mincost = 0, visited[10], count = 1;
+    
+    // Initialize all vertices as unvisited
+    for (i = 1; i <= n; i++) {
+        visited[i] = 0;
+    }
+    
+    printf("Edges considered for the MST are:\n");
+    visited[1] = 1; // Start with the first vertex
+    
+    while (count < n) {
+        min = 999; // Set a large value for minimum to find the smallest edge
+        
+        // Find the minimum cost edge from the visited set to an unvisited vertex
+        for (i = 1; i <= n; i++) {
+            if (visited[i]) { // Check only for visited vertices
+                for (j = 1; j <= n; j++) {
+                    if (!visited[j] && cost[i][j] < min) { // Find unvisited and minimum edge
+                        min = cost[i][j];
+                        u = i;
+                        v = j;
+                    }
+                }
+            }
+        }
+        
+        // Add the edge to the MST
+        printf("Edge %d: (%d,%d) = %d\n", count++, u, v, min);
+        mincost += min;
+        visited[v] = 1; // Mark the destination vertex as visited
+        
+        cost[u][v] = cost[v][u] = 999; // Mark the edge as visited by setting it to infinity
+    }
+    
+    printf("The minimum cost is: %d\n", mincost); // Output the total minimum cost
+}

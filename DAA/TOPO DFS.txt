@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include<stdlib.h>
+ int topo[15],k;
+ void dfs(int a[10][10],int n,int visited[10],int s);
+int main() {
+    int n,i,j,a[10][10];
+    int visited[10]={0};
+    printf("enter the number of vertices\n");
+    scanf("%d",&n);
+    printf("enter the adj matrix\n");
+    for(i=1;i<=n;i++)
+    {
+        for(j=1;j<=n;j++)
+        {
+            scanf("%d",&a[i][j]);
+        }
+    }
+     for(i=1;i<=n;i++)
+    {
+      if(visited[i]==0)
+      dfs(a,n,visited,i);
+    }
+    
+    printf("The topological order is\n");
+    for(i=k;i>0;i--)
+    {
+        printf("%d\t",topo[i]);
+    } 
+
+    return 0;
+}
+
+void dfs(int a[10][10],int n,int visited[10],int s)
+{ 
+    visited[s]=1;
+    for(int i=1;i<=n;i++)
+    {
+      if(visited[i]==0 && a[s][i]==1)
+      dfs(a,n,visited,i);
+    }
+    topo[++k]=s;
+    
+}

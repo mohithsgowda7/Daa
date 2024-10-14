@@ -1,0 +1,180 @@
+#include <stdio.h>
+#include <stdlib.h>
+int x[10];
+static int c = 1;
+void printBoard(int n)
+{
+
+    int i, j;
+    printf("Solution %d:\n", c++);
+    for (i = 1; i <= n; i++)
+    {
+        for (j = 1; j <= n; j++)
+        {
+            if (x[i] == j)
+                printf("Q\t");
+            else
+                printf("-\t");
+        }
+        printf("\n");
+    }
+}
+int place(int k, int i)
+{
+    int j;
+    for (j = 1; j < k; j++)
+    {
+        if ((x[j] == i) || abs(x[j] - i) == abs(j - k))
+            return 0;
+    }
+    return 1;
+}
+void nQueens(int k, int n)
+{
+    int i, j;
+    for (i = 1; i <= n; i++)
+    {
+        if (place(k, i))
+        {
+            x[k] = i;
+            if (k == n)
+            {
+                printf("\n");
+                printBoard(n);
+            }
+            else
+                nQueens(k + 1, n);
+        }
+    }
+}
+int main()
+{
+    int n;
+    printf("Enter the number of queens:\n");
+    scanf("%d", &n);
+    nQueens(1, n);
+    if (c == 1)
+        printf("No solutions!");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+Global Variables
+c
+Copy code
+int x[10];
+static int c = 1;
+x[10]: This array stores the position of the queens on the chessboard. Each index x[k] represents the row of the k-th queen, and the value x[k] represents the column where the queen is placed.
+static int c = 1;: This is a counter to track the number of solutions found. static ensures that its value persists across function calls and retains its value between successive invocations of printBoard.
+Function: printBoard(int n)
+c
+Copy code
+void printBoard(int n)
+{
+    int i, j;
+    printf("Solution %d:\n", c++);
+    for (i = 1; i <= n; i++)
+    {
+        for (j = 1; j <= n; j++)
+        {
+            if (x[i] == j)
+                printf("Q\t");
+            else
+                printf("-\t");
+        }
+        printf("\n");
+    }
+}
+Purpose: This function prints the chessboard configuration for a given solution where queens are placed.
+int i, j;: Loop variables to iterate through the rows (i) and columns (j) of the chessboard.
+printf("Solution %d:\n", c++);: It prints the solution number, and increments c to keep track of how many solutions have been found.
+Nested loops (for (i = 1; i <= n; i++) and for (j = 1; j <= n; j++)): These loops iterate over each square on the chessboard.
+If a queen is present at row i and column j (x[i] == j), it prints "Q\t" (indicating a queen).
+If no queen is present at that position, it prints "-\t" (indicating an empty square).
+printf("\n");: After printing each row, it moves to the next line.
+Function: place(int k, int i)
+c
+Copy code
+int place(int k, int i)
+{
+    int j;
+    for (j = 1; j < k; j++)
+    {
+        if ((x[j] == i) || abs(x[j] - i) == abs(j - k))
+            return 0;
+    }
+    return 1;
+}
+Purpose: This function checks whether it is valid to place a queen in row k and column i.
+Parameters:
+k: Row index (where you are trying to place the queen).
+i: Column index (the column in which you want to place the queen).
+Logic: For the queen to be placed in row k and column i, two conditions must be checked:
+Same Column Check: if (x[j] == i) ensures that no queen is already placed in column i (column conflict).
+Diagonal Check: abs(x[j] - i) == abs(j - k) checks if two queens are in diagonal conflict. If the absolute difference between row indices equals the absolute difference between column indices, it means the queens are diagonally aligned.
+Return Value:
+If a conflict is found, it returns 0 (invalid position).
+If no conflict is found, it returns 1 (valid position).
+Function: nQueens(int k, int n)
+c
+Copy code
+void nQueens(int k, int n)
+{
+    int i;
+    for (i = 1; i <= n; i++)
+    {
+        if (place(k, i))
+        {
+            x[k] = i;
+            if (k == n)
+            {
+                printf("\n");
+                printBoard(n);
+            }
+            else
+                nQueens(k + 1, n);
+        }
+    }
+}
+Purpose: This is the recursive backtracking function that tries to place queens on the board row by row.
+Parameters:
+k: Current row number where the algorithm is trying to place a queen.
+n: The total number of queens (same as the size of the board n x n).
+Logic:
+for (i = 1; i <= n; i++): This loop tries to place the queen in each column (i) of the current row (k).
+if (place(k, i)): Checks if placing the queen in column i of row k is valid (using the place() function).
+If valid: The queen's position is stored (x[k] = i), and the function checks if this is the last row (k == n).
+If this is the last row, the current solution is printed using printBoard(n).
+Otherwise, the function recursively calls nQueens(k + 1, n) to try placing the next queen in the next row.
+If invalid, it tries the next column (i + 1).
+main() Function
+c
+Copy code
+int main()
+{
+    int n;
+    printf("Enter the number of queens:\n");
+    scanf("%d", &n);
+    nQueens(1, n);
+    if (c == 1)
+        printf("No solutions!");
+}
+Purpose: Entry point of the program.
+int n;: Variable to store the number of queens (and the size of the chessboard).
+scanf("%d", &n);: Takes the number of queens as input.
+nQueens(1, n);: The function nQueens is called with the initial row k = 1 and size n.
+if (c == 1): If c is still 1 after the recursive calls, it means no solutions were found, and "No solutions!" is printed.
+How It Works:
+Input: The user inputs the number of queens (which is also the size of the chessboard).
+Recursive Backtracking: The function nQueens places queens row by row, trying each column and checking if it's valid using place().
+Printing Solutions: If a solution is found, the board is printed using printBoard().
+Handling Edge Cases: If no solution exists for the given n, the program prints "No solutions!"
